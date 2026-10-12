@@ -41,6 +41,10 @@ google docs sheets slides drive github untitled document spreadsheet new edit vi
 claude artifact mail gmail inbox email copy notes""".split()) | set(tt.config().get("stop_words", []))
 
 
+ACCOUNT_SCOPED = re.compile(
+    r"^https://(mail|calendar|drive|photos|contacts|keep|myaccount|console\.cloud)\.google\.com/|/u/\d+/|[?&]authuser=")
+
+
 def profile_rules():
     return tt.config().get("rules", [])
 
@@ -60,7 +64,11 @@ def dup_key(t):
     if u.hostname in ("localhost", "127.0.0.1"):
         # Ports get reused by different projects, so the title has to agree too.
         return f"{u.netloc}{u.path.rstrip('/')}|{t['title']}"
-    return tt.normalize(t["url"])
+    key = tt.normalize(t["url"])
+    if not key.startswith(("gdoc:", "gdrive:")) and ACCOUNT_SCOPED.search(t["url"]):
+        # /mail/u/0/ is a different mailbox in each profile, so only same-profile copies collide.
+        return f"{t['profile']}|{key}"
+    return key
 
 
 def is_search(url):
