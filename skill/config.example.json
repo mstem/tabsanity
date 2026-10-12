@@ -1,0 +1,25 @@
+{
+  "_comment": "Copy to config.json and edit. backup_dir: where the restore page of open tabs is written. stop_words: extra words (your name, your employer's domain) that should never pair a tab with a task. rules: which Chrome profile a URL belongs in; first match wins. 'host' matches the URL's host or any subdomain, 'url_contains' matches anywhere in the URL. Profile names are Chrome's directory names (Default, Profile 1, ...).",
+  "backup_dir": "~/Downloads",
+  "stop_words": [
+    "yourname"
+  ],
+  "rules": [
+    {
+      "host": "example-employer.com",
+      "profile": "Profile 1"
+    },
+    {
+      "url_contains": "github.com/your-work-org",
+      "profile": "Profile 1"
+    },
+    {
+      "url_contains": "authuser=you@example-employer.com",
+      "profile": "Profile 1"
+    },
+    {
+      "url_contains": "authuser=you@gmail.com",
+      "profile": "Default"
+    }
+  ]
+}
